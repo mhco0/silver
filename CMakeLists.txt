@@ -13,12 +13,14 @@ project(
   LANGUAGES CXX
   VERSION 1.0.0)
 
+find_package(glad CONFIG REQUIRED)
 find_package(glfw3 CONFIG REQUIRED)
+find_package(glm CONFIG REQUIRED)
 find_package(imgui CONFIG REQUIRED)
 find_package(OpenGL REQUIRED)
 
 include_directories(include)
 
-add_executable(main src/main.cpp)
+add_executable(silver src/main.cpp)
 
-target_link_libraries(main PRIVATE glfw OpenGL::GL)
+target_link_libraries(silver PRIVATE glfw OpenGL::GL glm::glm glad::glad)

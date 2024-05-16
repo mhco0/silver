@@ -8,7 +8,7 @@
             "name": "C++ Launch",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/build/bin/main.exe",
+            "program": "${workspaceFolder}/build/bin/silver.exe",
             "args": [],
             "environment": [
                 {
