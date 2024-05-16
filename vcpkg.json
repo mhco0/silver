@@ -1,0 +1,15 @@
+{
+    "version": "1.0.0",
+    "description": "silver dependencies for the project project",
+    "dependencies": [
+        "opengl",
+        "glfw3",
+        {
+            "name": "imgui",
+            "features": [
+                "glfw-binding",
+                "opengl3-binding"
+            ]
+        }
+    ]
+}
