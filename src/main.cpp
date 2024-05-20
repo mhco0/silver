@@ -10,7 +10,7 @@
 #include <GLFW/glfw3.h>
 #include <glm/vec3.hpp>
 
-const GLuint WIDTH = 800, HEIGHT = 600;
+#include <silver/window.h>
 
 void key_callback(GLFWwindow* window, int key, int scancode, int action,
                   int mode) {
@@ -25,11 +25,9 @@ int main(void) {
   glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
   glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-  GLFWwindow* window =
-      glfwCreateWindow(WIDTH, HEIGHT, "[glad] GL with GLFW", NULL, NULL);
-  glfwMakeContextCurrent(window);
+  silver::Window window(800, 600, "[glad] GL with GLFW");
 
-  glfwSetKeyCallback(window, key_callback);
+  //glfwSetKeyCallback(window, key_callback);
 
   if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
     std::cout << "Failed to initialize OpenGL context" << std::endl;
@@ -38,20 +36,7 @@ int main(void) {
   std::cout << std::format("GL {}.{}\n", GLVersion.major, GLVersion.minor)
             << std::endl;
 
-  int channels = 0;
-  while (!glfwWindowShouldClose(window)) {
-    glfwPollEvents();
-
-    channels = (channels + 1) % 8;
-    glm::vec3 color((1 & channels), (1 & (channels >> 1)), (1 & (channels >> 2)));
-    std::cout << std::format("{} {} {}", color.r, color.g, color.b)
-              << std::endl;
-    glClearColor(color.r, color.g, color.b, 1.0f);
-
-    glClear(GL_COLOR_BUFFER_BIT);
-
-    glfwSwapBuffers(window);
-  }
+  window.MainLoop();
 
   glfwTerminate();
 

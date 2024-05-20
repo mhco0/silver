@@ -21,6 +21,6 @@ find_package(OpenGL REQUIRED)
 
 include_directories(include)
 
-add_executable(silver src/main.cpp)
+add_executable(silver src/main.cpp src/window.cpp)
 
 target_link_libraries(silver PRIVATE glfw OpenGL::GL glm::glm glad::glad)
