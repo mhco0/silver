@@ -21,6 +21,10 @@ find_package(OpenGL REQUIRED)
 
 include_directories(include)
 
-add_executable(silver src/main.cpp src/window.cpp)
+set(silver_SRCS ./src/main.cpp ./src/projection_3d.cpp ./src/window.cpp)
+set(silver_HRDS ./include/silver/application.h ./include/silver/camera_3d.h
+                ./include/silver/window.h ./include/silver/projection_3d.h)
+
+add_executable(silver ${silver_SRCS} ${silver_HRDS})
 
 target_link_libraries(silver PRIVATE glfw OpenGL::GL glm::glm glad::glad)

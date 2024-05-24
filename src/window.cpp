@@ -14,9 +14,21 @@
 #include "silver/window.h"
 
 namespace silver {
-Window::Window(int width, int height, const std::string_view& title)
-    : window_(glfwCreateWindow(width, height, title.data(), nullptr, nullptr)) {
+Window::Window(int width, int height, const std::string_view& title) {
+  glfwInit();
+
+  std::cout << "here" << std::endl;
+
+  glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+  glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
+  glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+
+  window_ = glfwCreateWindow(width, height, title.data(), nullptr, nullptr);
   glfwMakeContextCurrent(window_);
+
+  if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
+    std::cout << "Failed to initialize OpenGL context" << std::endl;
+  }
 }
 
 Window::~Window() {
