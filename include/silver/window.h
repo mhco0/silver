@@ -4,11 +4,14 @@
 
 #include <memory>
 #include <string_view>
+#include <vector>
 
 #define GLAD_GL_IMPLEMENTATION
 #include <glad/glad.h>
 #define GLFW_INCLUDE_NONE
 #include <GLFW/glfw3.h>
+
+#include "silver/i_widget.h"
 
 namespace silver {
 class Window {
@@ -19,9 +22,11 @@ class Window {
   Window(Window&& rval) = delete;
   Window& operator=(const Window&) = delete;
 
+  void AddWidget(IWidget* widget);
   void MainLoop();
 
  private:
   GLFWwindow* window_;
+  std::vector<IWidget*> widgets_;
 };
 }  // namespace silver

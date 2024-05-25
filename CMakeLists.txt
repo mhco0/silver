@@ -24,11 +24,15 @@ find_package(GTest CONFIG REQUIRED)
 include_directories(include)
 
 set(silver_SRCS ./src/main.cpp ./src/projection_3d.cpp ./src/window.cpp
-                ./src/utils.cpp)
+                ./src/utils.cpp ./src/camera_controller_widget.cpp)
 set(silver_HRDS
-    ./include/silver/application.h ./include/silver/camera_3d.h
-    ./include/silver/window.h ./include/silver/projection_3d.h
-    ./include/silver/utils.h)
+    ./include/silver/application.h
+    ./include/silver/camera_3d.h
+    ./include/silver/window.h
+    ./include/silver/projection_3d.h
+    ./include/silver/utils.h
+    ./include/silver/i_widget.h
+    ./include/silver/camera_controller_widget.h)
 
 add_executable(silver ${silver_SRCS} ${silver_HRDS})
 target_link_libraries(silver PRIVATE glfw OpenGL::GL glm::glm glad::glad
@@ -38,8 +42,9 @@ target_link_libraries(silver PRIVATE glfw OpenGL::GL glm::glm glad::glad
 include(GoogleTest)
 include(CTest)
 enable_testing()
-set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
-
+set(gtest_force_shared_crt
+    ON
+    CACHE BOOL "" FORCE)
 
 set(silver_TESTS ./src/utils_test.cpp)
 add_executable(silver_tests ${silver_SRCS} ${silver_HRDS} ${silver_TESTS})

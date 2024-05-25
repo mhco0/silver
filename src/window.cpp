@@ -14,6 +14,7 @@
 #include <GLFW/glfw3.h>
 #include <glm/vec3.hpp>
 
+#include "silver/i_widget.h"
 #include "silver/window.h"
 
 namespace silver {
@@ -51,6 +52,10 @@ Window::~Window() {
   glfwTerminate();
 }
 
+void Window::AddWidget(IWidget* widget) {
+  widgets_.push_back(widget);
+}
+
 void Window::MainLoop() {
   bool show_another_window = false;
   ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
@@ -67,6 +72,10 @@ void Window::MainLoop() {
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplGlfw_NewFrame();
     ImGui::NewFrame();
+
+    for(const auto& widget : widgets_){
+      widget->Render();
+    }
 
     // 2. Show a simple window that we create ourselves. We use a Begin/End pair to create a named window.
     {

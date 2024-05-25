@@ -8,15 +8,27 @@
 
 namespace silver {
 
-class Camera3d {
+class CameraControllerWidget;
 
- private:
+class Camera3d {
+ public:
+  explicit Camera3d() {
+    normal_ = {};
+    focus_ = {};
+    forward_ = {};
+    distance_from_projection_ = 0.0;
+    camera_height_ = 30;
+    camera_width_ = 20;
+  }
+
+ protected:
   glm::vec3 normal_;
   glm::vec3 focus_;
-  glm::vec3 foward_;
+  glm::vec3 forward_;
   double distance_from_projection_;
   int camera_height_;
   int camera_width_;
+  friend class CameraControllerWidget;
 };
 
 }  // namespace silver
