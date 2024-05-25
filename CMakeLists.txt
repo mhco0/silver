@@ -27,4 +27,4 @@ set(silver_HRDS ./include/silver/application.h ./include/silver/camera_3d.h
 
 add_executable(silver ${silver_SRCS} ${silver_HRDS})
 
-target_link_libraries(silver PRIVATE glfw OpenGL::GL glm::glm glad::glad)
+target_link_libraries(silver PRIVATE glfw OpenGL::GL glm::glm glad::glad imgui::imgui)

@@ -2,8 +2,8 @@
 // Copyright (c)
 #pragma once
 
-#include <memory>
 #include <iostream>
+#include <memory>
 
 #include "silver/window.h"
 
@@ -18,14 +18,11 @@ class Application {
   }
 
   static void Run() {
-    std::cout << GetInstance().main_window_ << std::endl;
     if (GetInstance().main_window_ == nullptr) {
       return;
     }
 
-    while (true) {
-      GetInstance().main_window_->MainLoop();
-    }
+    GetInstance().main_window_->MainLoop();
   }
 
  protected:
