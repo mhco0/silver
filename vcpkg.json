@@ -12,6 +12,8 @@
                 "glfw-binding",
                 "opengl3-binding"
             ]
-        }
+        },
+        "tl-expected",
+        "gtest"
     ]
 }

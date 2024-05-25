@@ -18,13 +18,40 @@ find_package(glfw3 CONFIG REQUIRED)
 find_package(glm CONFIG REQUIRED)
 find_package(imgui CONFIG REQUIRED)
 find_package(OpenGL REQUIRED)
+find_package(tl-expected CONFIG REQUIRED)
+find_package(GTest CONFIG REQUIRED)
 
 include_directories(include)
 
-set(silver_SRCS ./src/main.cpp ./src/projection_3d.cpp ./src/window.cpp)
-set(silver_HRDS ./include/silver/application.h ./include/silver/camera_3d.h
-                ./include/silver/window.h ./include/silver/projection_3d.h)
+set(silver_SRCS ./src/main.cpp ./src/projection_3d.cpp ./src/window.cpp
+                ./src/utils.cpp)
+set(silver_HRDS
+    ./include/silver/application.h ./include/silver/camera_3d.h
+    ./include/silver/window.h ./include/silver/projection_3d.h
+    ./include/silver/utils.h)
 
 add_executable(silver ${silver_SRCS} ${silver_HRDS})
+target_link_libraries(silver PRIVATE glfw OpenGL::GL glm::glm glad::glad
+                                     imgui::imgui tl::expected)
 
-target_link_libraries(silver PRIVATE glfw OpenGL::GL glm::glm glad::glad imgui::imgui)
+# Tests
+include(GoogleTest)
+include(CTest)
+enable_testing()
+set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
+
+
+set(silver_TESTS ./src/utils_test.cpp)
+add_executable(silver_tests ${silver_SRCS} ${silver_HRDS} ${silver_TESTS})
+
+target_link_libraries(
+  silver_tests
+  PRIVATE glfw
+          OpenGL::GL
+          glm::glm
+          glad::glad
+          imgui::imgui
+          tl::expected
+          GTest::gtest_main)
+add_test(NAME silver_test COMMAND silver_tests)
+gtest_discover_tests(silver_tests)
