@@ -25,7 +25,7 @@ class Camera3d {
   glm::vec3 normal_;
   glm::vec3 focus_;
   glm::vec3 forward_;
-  double distance_from_projection_;
+  float distance_from_projection_;
   int camera_height_;
   int camera_width_;
   friend class CameraControllerWidget;
