@@ -13,6 +13,8 @@ project(
   LANGUAGES CXX
   VERSION 1.0.0)
 
+find_package(ImGui-SFML CONFIG REQUIRED)
+find_package(SFML COMPONENTS system window graphics CONFIG REQUIRED)
 find_package(glad CONFIG REQUIRED)
 find_package(glfw3 CONFIG REQUIRED)
 find_package(glm CONFIG REQUIRED)
@@ -35,7 +37,7 @@ set(silver_HRDS
     ./include/silver/camera_controller_widget.h)
 
 add_executable(silver ${silver_SRCS} ${silver_HRDS})
-target_link_libraries(silver PRIVATE glfw OpenGL::GL glm::glm glad::glad
+target_link_libraries(silver PRIVATE sfml-system sfml-network sfml-graphics sfml-window ImGui-SFML::ImGui-SFML glfw OpenGL::GL glm::glm glad::glad
                                      imgui::imgui tl::expected)
 
 # Tests

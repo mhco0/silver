@@ -6,6 +6,8 @@
         "glm",
         "opengl",
         "glfw3",
+        "sfml",
+        "imgui-sfml",
         {
             "name": "imgui",
             "features": [
