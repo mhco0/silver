@@ -6,10 +6,7 @@
 #include <string_view>
 #include <vector>
 
-#define GLAD_GL_IMPLEMENTATION
-#include <glad/glad.h>
-#define GLFW_INCLUDE_NONE
-#include <GLFW/glfw3.h>
+#include <SFML/Graphics/RenderWindow.hpp>
 
 #include "silver/i_widget.h"
 
@@ -26,7 +23,7 @@ class Window {
   void MainLoop();
 
  private:
-  GLFWwindow* window_;
+  sf::RenderWindow window_;
   std::vector<IWidget*> widgets_;
 };
 }  // namespace silver

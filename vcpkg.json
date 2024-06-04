@@ -2,17 +2,13 @@
     "version": "1.0.0",
     "description": "silver dependencies for the project project",
     "dependencies": [
-        "glad",
         "glm",
         "opengl",
-        "glfw3",
         "sfml",
         "imgui-sfml",
         {
             "name": "imgui",
             "features": [
-                "glfw-binding",
-                "opengl3-binding",
                 "docking-experimental"
             ]
         },

@@ -14,9 +14,10 @@ project(
   VERSION 1.0.0)
 
 find_package(ImGui-SFML CONFIG REQUIRED)
-find_package(SFML COMPONENTS system window graphics CONFIG REQUIRED)
-find_package(glad CONFIG REQUIRED)
-find_package(glfw3 CONFIG REQUIRED)
+find_package(
+  SFML
+  COMPONENTS system window graphics CONFIG
+  REQUIRED)
 find_package(glm CONFIG REQUIRED)
 find_package(imgui CONFIG REQUIRED)
 find_package(OpenGL REQUIRED)
@@ -37,8 +38,17 @@ set(silver_HRDS
     ./include/silver/camera_controller_widget.h)
 
 add_executable(silver ${silver_SRCS} ${silver_HRDS})
-target_link_libraries(silver PRIVATE sfml-system sfml-network sfml-graphics sfml-window ImGui-SFML::ImGui-SFML glfw OpenGL::GL glm::glm glad::glad
-                                     imgui::imgui tl::expected)
+target_link_libraries(
+  silver
+  PRIVATE sfml-system
+          sfml-network
+          sfml-graphics
+          sfml-window
+          ImGui-SFML::ImGui-SFML
+          OpenGL::GL
+          glm::glm
+          imgui::imgui
+          tl::expected)
 
 # Tests
 include(GoogleTest)
@@ -51,14 +61,7 @@ set(gtest_force_shared_crt
 set(silver_TESTS ./src/utils_test.cpp)
 add_executable(silver_tests ${silver_SRCS} ${silver_HRDS} ${silver_TESTS})
 
-target_link_libraries(
-  silver_tests
-  PRIVATE glfw
-          OpenGL::GL
-          glm::glm
-          glad::glad
-          imgui::imgui
-          tl::expected
-          GTest::gtest_main)
+target_link_libraries(silver_tests PRIVATE OpenGL::GL glm::glm imgui::imgui
+                                           tl::expected GTest::gtest_main)
 add_test(NAME silver_test COMMAND silver_tests)
 gtest_discover_tests(silver_tests)

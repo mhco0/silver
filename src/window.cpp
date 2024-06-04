@@ -5,31 +5,23 @@
 #include <iostream>
 #include <string_view>
 
+#include <imgui-SFML.h>
 #include <imgui.h>
-#include <imgui_impl_glfw.h>
-#include <imgui_impl_opengl3.h>
-#define GLAD_GL_IMPLEMENTATION
-#include <glad/glad.h>
-#define GLFW_INCLUDE_NONE
-#include <GLFW/glfw3.h>
+#include <SFML/Graphics/RenderWindow.hpp>
+#include <SFML/System/Clock.hpp>
+#include <SFML/Window/Event.hpp>
 #include <glm/vec3.hpp>
 
 #include "silver/i_widget.h"
 #include "silver/window.h"
 
 namespace silver {
-Window::Window(int width, int height, const std::string_view& title) {
-  if (GLFW_TRUE != glfwInit()) {
-    std::cout << "Failed to initialize GLFW context" << std::endl;
+Window::Window(int width, int height, const std::string_view& title)
+    : window_(sf::VideoMode(width, height), title.data()) {
+
+  if (!ImGui::SFML::Init(window_)) {
+    std::cout << "Error on init SFML on window" << std::endl;
   }
-
-  glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-  glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
-  glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-
-  window_ = glfwCreateWindow(width, height, title.data(), nullptr, nullptr);
-  glfwMakeContextCurrent(window_);
-  glfwSwapInterval(1);
 
   IMGUI_CHECKVERSION();
   ImGui::CreateContext();
@@ -37,20 +29,10 @@ Window::Window(int width, int height, const std::string_view& title) {
   io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
   io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;
   io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
-
-  if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
-    std::cout << "Failed to initialize OpenGL context" << std::endl;
-  }
-
-  ImGui_ImplGlfw_InitForOpenGL(window_, true);
-  ImGui_ImplOpenGL3_Init("#version 150");
 }
 
 Window::~Window() {
-  ImGui_ImplOpenGL3_Shutdown();
-  ImGui_ImplGlfw_Shutdown();
-  glfwDestroyWindow(window_);
-  glfwTerminate();
+  ImGui::SFML::Shutdown();
 }
 
 void Window::AddWidget(IWidget* widget) {
@@ -60,18 +42,18 @@ void Window::AddWidget(IWidget* widget) {
 void Window::MainLoop() {
   ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
   ImGuiIO& io = ImGui::GetIO();
-  while (!glfwWindowShouldClose(window_)) {
-    // Poll and handle events(inputs, window resize, etc.)
-    // You can read the io.WantCaptureMouse, io.WantCaptureKeyboard flags to tell if dear imgui wants to use your inputs.
-    // - When io.WantCaptureMouse is true, do not dispatch mouse input data to your main application, or clear/overwrite your copy of the mouse data.
-    // - When io.WantCaptureKeyboard is true, do not dispatch keyboard input data to your main application, or clear/overwrite your copy of the keyboard data.
-    // Generally you may always pass all inputs to dear imgui, and hide them from your application based on those two flags.
-    glfwPollEvents();
+  sf::Clock delta_clock;
+  while (window_.isOpen()) {
+    sf::Event event;
+    while (window_.pollEvent(event)) {
+      ImGui::SFML::ProcessEvent(window_, event);
 
-    // Start the Dear ImGui frame
-    ImGui_ImplOpenGL3_NewFrame();
-    ImGui_ImplGlfw_NewFrame();
-    ImGui::NewFrame();
+      if (event.type == sf::Event::Closed) {
+        window_.close();
+      }
+    }
+
+    ImGui::SFML::Update(window_, delta_clock.restart());
 
     for (const auto& widget : widgets_) {
       widget->Render();
@@ -106,18 +88,9 @@ void Window::MainLoop() {
     }
 
     ImGui::Render();
-
-    int display_w;
-    int display_h;
-    glfwGetFramebufferSize(window_, &display_w, &display_h);
-    glViewport(0, 0, display_w, display_h);
-    glClearColor(clear_color.x * clear_color.w, clear_color.y * clear_color.w,
-                 clear_color.z * clear_color.w, clear_color.w);
-    glClear(GL_COLOR_BUFFER_BIT);
-
-    ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-
-    glfwSwapBuffers(window_);
+    window_.clear(clear_color);
+    ImGui::SFML::Render(window_);
+    window_.display();
   }
 }
 }  // namespace silver
