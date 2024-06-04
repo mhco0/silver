@@ -11,6 +11,7 @@
 #include "silver/i_widget.h"
 
 namespace silver {
+class Canvas;
 class Window {
  public:
   Window(int width, int height, const std::string_view& title);
@@ -25,5 +26,6 @@ class Window {
  private:
   sf::RenderWindow window_;
   std::vector<IWidget*> widgets_;
+  friend class Canvas;
 };
 }  // namespace silver

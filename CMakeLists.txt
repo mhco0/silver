@@ -27,7 +27,7 @@ find_package(GTest CONFIG REQUIRED)
 include_directories(include)
 
 set(silver_SRCS ./src/main.cpp ./src/projection_3d.cpp ./src/window.cpp
-                ./src/utils.cpp ./src/camera_controller_widget.cpp)
+                ./src/utils.cpp ./src/camera_controller_widget.cpp ./src/canvas.cpp)
 set(silver_HRDS
     ./include/silver/application.h
     ./include/silver/camera_3d.h
@@ -35,7 +35,8 @@ set(silver_HRDS
     ./include/silver/projection_3d.h
     ./include/silver/utils.h
     ./include/silver/i_widget.h
-    ./include/silver/camera_controller_widget.h)
+    ./include/silver/camera_controller_widget.h
+    ./include/silver/canvas.h)
 
 add_executable(silver ${silver_SRCS} ${silver_HRDS})
 target_link_libraries(

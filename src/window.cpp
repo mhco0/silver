@@ -32,7 +32,7 @@ Window::Window(int width, int height, const std::string_view& title)
 }
 
 Window::~Window() {
-  ImGui::SFML::Shutdown();
+  ImGui::SFML::Shutdown(window_);
 }
 
 void Window::AddWidget(IWidget* widget) {
@@ -54,7 +54,6 @@ void Window::MainLoop() {
     }
 
     ImGui::SFML::Update(window_, delta_clock.restart());
-
     for (const auto& widget : widgets_) {
       widget->Render();
     }
@@ -87,7 +86,6 @@ void Window::MainLoop() {
       ImGui::End();
     }
 
-    ImGui::Render();
     window_.clear(clear_color);
     ImGui::SFML::Render(window_);
     window_.display();
