@@ -6,10 +6,13 @@
 #include <string_view>
 #include <vector>
 
+#include <glm/vec2.hpp>
 #include <glm/vec3.hpp>
 #include <tl/expected.hpp>
+
 
 namespace silver {
 tl::expected<std::vector<glm::vec3>, std::string_view> LoadGeometry(
     const std::string& path_file);
+
 };

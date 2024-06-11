@@ -4,6 +4,7 @@
     "dependencies": [
         "glm",
         "opengl",
+        "nativefiledialog",
         "sfml",
         "imgui-sfml",
         {

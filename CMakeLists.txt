@@ -23,11 +23,19 @@ find_package(imgui CONFIG REQUIRED)
 find_package(OpenGL REQUIRED)
 find_package(tl-expected CONFIG REQUIRED)
 find_package(GTest CONFIG REQUIRED)
+find_package(unofficial-nativefiledialog CONFIG REQUIRED)
 
 include_directories(include)
 
-set(silver_SRCS ./src/main.cpp ./src/projection_3d.cpp ./src/window.cpp
-                ./src/utils.cpp ./src/camera_controller_widget.cpp ./src/canvas.cpp)
+set(silver_SRCS
+    ./src/main.cpp
+    ./src/projection_3d.cpp
+    ./src/window.cpp
+    ./src/utils.cpp
+    ./src/camera_controller_widget.cpp
+    ./src/canvas.cpp
+    ./src/geometry_selection_widget.cpp)
+    
 set(silver_HRDS
     ./include/silver/application.h
     ./include/silver/camera_3d.h
@@ -36,7 +44,8 @@ set(silver_HRDS
     ./include/silver/utils.h
     ./include/silver/i_widget.h
     ./include/silver/camera_controller_widget.h
-    ./include/silver/canvas.h)
+    ./include/silver/canvas.h
+    ./include/silver/geometry_selection_widget.h)
 
 add_executable(silver ${silver_SRCS} ${silver_HRDS})
 target_link_libraries(
@@ -49,7 +58,8 @@ target_link_libraries(
           OpenGL::GL
           glm::glm
           imgui::imgui
-          tl::expected)
+          tl::expected
+          unofficial::nativefiledialog::nfd)
 
 # Tests
 include(GoogleTest)
