@@ -4,7 +4,6 @@
 #pragma once
 
 #include <functional>
-#include <queue>
 #include <string>
 #include <vector>
 
@@ -15,13 +14,15 @@ class GeometrySelectionWidget : public IWidget {
  public:
   using CallbackType = std::function<void(std::vector<std::string>)>;
 
-  GeometrySelectionWidget();
+  explicit GeometrySelectionWidget();
 
   void Render() override;
 
   void AddCallback(const CallbackType& callback);
 
+  void SelectGeometrys();
+
  private:
-  std::queue<CallbackType> on_selected_callbacks_;
+  std::vector<CallbackType> on_selected_callbacks_;
 };
 }  // namespace silver

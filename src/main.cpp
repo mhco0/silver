@@ -3,6 +3,8 @@
 
 #include <format>
 #include <iostream>
+#include <string>
+#include <vector>
 
 #include <silver/application.h>
 #include <silver/camera_3d.h>
@@ -19,6 +21,17 @@ int main(void) {
 
   window.AddWidget(&camera_widget);
   window.AddWidget(&geometry_selection_widget);
+
+  auto print_string = [](const std::string& str) -> void {
+    std::cout << std::format("{}\n", str);
+  };
+
+  auto print_strings =
+      [&print_string](const std::vector<std::string>& strs) -> void {
+    std::for_each(strs.begin(), strs.end(), print_string);
+  };
+
+  geometry_selection_widget.AddCallback(print_strings);
 
   silver::Application::SetMainWindow(&window);
 

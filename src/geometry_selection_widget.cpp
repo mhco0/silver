@@ -1,41 +1,93 @@
 // Created by Marcos Oliveira <mhco@cin.ufpe.br> on 06/11/2024.
 // Copyright (c)
 
+#include <format>
 #include <string>
 #include <vector>
 
 #include <imgui.h>
 #include <nfd.h>
+#include <tl/expected.hpp>
 
 #include "silver/geometry_selection_widget.h"
 #include "silver/utils.h"
 
 namespace silver {
+
+namespace internal {
+class NfdWrapper {
+ public:
+  explicit NfdWrapper() : path_set_{} {}
+
+  ~NfdWrapper() {
+    if (path_set_.count > 0) {
+      NFD_PathSet_Free(&path_set_);
+    }
+  }
+
+  std::vector<std::string> Paths() const {
+    std::vector<std::string> paths;
+    for (size_t i = 0; i < NFD_PathSet_GetCount(&path_set_); ++i) {
+      nfdchar_t* path = NFD_PathSet_GetPath(&path_set_, i);
+      paths.emplace_back(path);
+    }
+
+    return paths;
+  }
+
+  nfdpathset_t& GetSet() { return path_set_; }
+
+ private:
+  nfdpathset_t path_set_;
+};
+
+tl::expected<std::vector<std::string>, std::string> OpenDialog() {
+  constexpr const char* const kFilterText = "txt";
+  NfdWrapper wrapper{};
+  auto open_result = NFD_OpenDialogMultiple(kFilterText, "", &wrapper.GetSet());
+  using tlu = tl::unexpected<std::string>;
+  switch (open_result) {
+    case NFD_OKAY: {
+      return wrapper.Paths();
+    } break;
+    case NFD_CANCEL: {
+      return std::vector<std::string>{};
+    } break;
+    default: {
+      return tlu{NFD_GetError()};
+    } break;
+  }
+
+  return tlu{std::format("unreacheble code under {}", __func__)};
+}
+
+}  // namespace internal
+
 GeometrySelectionWidget::GeometrySelectionWidget() : on_selected_callbacks_{} {}
 
 void GeometrySelectionWidget::AddCallback(const CallbackType& callback) {
-  on_selected_callbacks_.push(callback);
+  on_selected_callbacks_.push_back(callback);
+}
+
+void GeometrySelectionWidget::SelectGeometrys() {
+  auto selected_paths = internal::OpenDialog();
+  if (!selected_paths.has_value()) {
+    auto error = selected_paths.error();
+    ImGui::LogText(error.c_str());
+    return;
+  }
+
+  for (auto& callback : on_selected_callbacks_) {
+    callback(selected_paths.value());
+  }
 }
 
 void GeometrySelectionWidget::Render() {
   ImGui::Begin("Geometry Selection");
   if (ImGui::Button("Load Geometry")) {
-    nfdpathset_t outPath;
-    nfdresult_t result = NFD_OpenDialogMultiple("txt", nullptr, &outPath);
-    if (result == NFD_OKAY) {
-      puts("Success!");
-
-      for (int i = 0; i < outPath.count; ++i) {
-        puts(outPath.buf);
-      }
-      free(outPath.buf);
-
-    } else if (result == NFD_CANCEL) {
-      puts("User pressed cancel.");
-    } else {
-      printf("Error: %s\n", NFD_GetError());
-    }
+    SelectGeometrys();
   }
   ImGui::End();
 }
+
 }  // namespace silver
