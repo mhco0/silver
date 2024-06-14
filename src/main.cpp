@@ -6,32 +6,36 @@
 #include <string>
 #include <vector>
 
+#include <glm/vec3.hpp>
+
 #include <silver/application.h>
 #include <silver/camera_3d.h>
 #include <silver/camera_controller_widget.h>
 #include <silver/canvas.h>
 #include <silver/geometry_selection_widget.h>
+#include <silver/utils.h>
 #include <silver/window.h>
 
 int main(void) {
   silver::Window window(800, 600, "Silver Surface Viewer");
+  silver::Canvas canvas(&window);
   silver::Camera3d camera;
   silver::CameraControllerWidget camera_widget(&camera);
   silver::GeometrySelectionWidget geometry_selection_widget;
+  silver::Projection3d projection(80, 60, 75, 12.0, 1);
 
   window.AddWidget(&camera_widget);
   window.AddWidget(&geometry_selection_widget);
 
-  auto print_string = [](const std::string& str) -> void {
-    std::cout << std::format("{}\n", str);
+  auto draw_geometry =
+      [&canvas, &projection](const std::vector<std::string>& paths) -> void {
+    auto geometry = silver::LoadGeometry(paths.at(0));
+    for (const auto& point : geometry.value()) {
+      canvas.DrawPoint(projection.Project(point));
+    }
   };
 
-  auto print_strings =
-      [&print_string](const std::vector<std::string>& strs) -> void {
-    std::for_each(strs.begin(), strs.end(), print_string);
-  };
-
-  geometry_selection_widget.AddCallback(print_strings);
+  geometry_selection_widget.AddCallback(draw_geometry);
 
   silver::Application::SetMainWindow(&window);
 

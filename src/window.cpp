@@ -2,7 +2,6 @@
 // Copyright (c)
 
 #include <format>
-#include <iostream>
 #include <string_view>
 
 #include <imgui-SFML.h>
@@ -12,7 +11,6 @@
 #include <SFML/Window/Event.hpp>
 #include <glm/vec3.hpp>
 
-#include "silver/canvas.h"
 #include "silver/i_widget.h"
 #include "silver/window.h"
 
@@ -21,7 +19,7 @@ Window::Window(int width, int height, const std::string_view& title)
     : window_(sf::VideoMode(width, height), title.data()) {
 
   if (!ImGui::SFML::Init(window_)) {
-    std::cout << "Error on init SFML on window" << std::endl;
+    ImGui::LogText("Error on init SFML on window");
   }
 
   IMGUI_CHECKVERSION();
@@ -44,7 +42,6 @@ void Window::MainLoop() {
   ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
   ImGuiIO& io = ImGui::GetIO();
   sf::Clock delta_clock;
-  silver::Canvas canvas(this);
 
   while (window_.isOpen()) {
     sf::Event event;
@@ -63,7 +60,6 @@ void Window::MainLoop() {
 
     window_.clear(clear_color);
     ImGui::SFML::Render(window_);
-    canvas.DrawPoint(400, 300);
     window_.display();
   }
 }

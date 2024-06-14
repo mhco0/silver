@@ -8,9 +8,9 @@
 #include <glm/vec4.hpp>
 
 namespace silver {
-class Projection3D {
+class Projection3d {
  public:
-  Projection3D(int space_width, int space_height, double fov, double z_far,
+  Projection3d(int space_width, int space_height, double fov, double z_far,
                double z_near);
 
   glm::vec2 Project(const glm::vec3& vec);

@@ -3,6 +3,7 @@
 #pragma once
 
 #include <SFML/Graphics/RenderTexture.hpp>
+#include <glm/vec2.hpp>
 
 #include "silver/window.h"
 
@@ -11,7 +12,7 @@ class Canvas {
  public:
   Canvas(Window* target);
 
-  void DrawPoint(float x, float y);
+  void DrawPoint(const glm::vec2& point);
 
  private:
   Window* target_;

@@ -5,6 +5,7 @@
 #include <iostream>
 
 #include <SFML/Graphics/Vertex.hpp>
+#include <glm/vec2.hpp>
 
 #include "silver/canvas.h"
 
@@ -14,8 +15,9 @@ Canvas::Canvas(Window* target) : target_(target) {
   background_.create(window_size.x, window_size.y);
 }
 
-void Canvas::DrawPoint(float x, float y) {
-  auto vertex = sf::Vertex(sf::Vector2f{x, y}, sf::Color::White);
+void Canvas::DrawPoint(const glm::vec2& point) {
+  std::cout << std::format("{} {}", point.x, point.y) << std::endl;
+  auto vertex = sf::Vertex(sf::Vector2f{point.x, point.y}, sf::Color::White);
   target_->window_.draw(&vertex, 1, sf::Points);
 }
 
