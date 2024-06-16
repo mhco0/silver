@@ -12,22 +12,18 @@ class CameraControllerWidget;
 
 class Camera3d {
  public:
-  explicit Camera3d() {
-    normal_ = {};
-    focus_ = {};
-    forward_ = {};
-    distance_from_projection_ = 0.0;
-    camera_height_ = 30;
-    camera_width_ = 20;
-  }
+  explicit Camera3d();
+
+  void Orthonomalize();
 
  protected:
-  glm::vec3 normal_;
   glm::vec3 focus_;
-  glm::vec3 forward_;
+  glm::vec3 n_;
+  glm::vec3 v_;
+  glm::vec3 u_;
   float distance_from_projection_;
-  int camera_height_;
-  int camera_width_;
+  float camera_height_;
+  float camera_width_;
   friend class CameraControllerWidget;
 };
 

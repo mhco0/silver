@@ -8,6 +8,7 @@
 
 #include <SFML/Graphics/RenderWindow.hpp>
 
+#include "silver/i_node.h"
 #include "silver/i_widget.h"
 
 namespace silver {
@@ -21,11 +22,12 @@ class Window {
   Window& operator=(const Window&) = delete;
 
   void AddWidget(IWidget* widget);
+  void AddNode(INode* node);
   void MainLoop();
 
  private:
   sf::RenderWindow window_;
-  std::vector<IWidget*> widgets_;
+  std::vector<INode*> nodes_;
   friend class Canvas;
 };
 }  // namespace silver

@@ -26,16 +26,23 @@ int main(void) {
 
   window.AddWidget(&camera_widget);
   window.AddWidget(&geometry_selection_widget);
+  window.AddNode(&canvas);
 
   auto draw_geometry =
       [&canvas, &projection](const std::vector<std::string>& paths) -> void {
     auto geometry = silver::LoadGeometry(paths.at(0));
     for (const auto& point : geometry.value()) {
-      canvas.DrawPoint(projection.Project(point));
+      canvas.AddPoint(projection.Project(point));
     }
   };
 
-  geometry_selection_widget.AddCallback(draw_geometry);
+  geometry_selection_widget.AddLoadCallback(draw_geometry);
+
+  auto clear_geometrys = [&canvas]() -> void {
+    canvas.Clear();
+  };
+
+  geometry_selection_widget.AddClearCallback(clear_geometrys);
 
   silver::Application::SetMainWindow(&window);
 

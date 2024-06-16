@@ -10,15 +10,29 @@
 #include "silver/canvas.h"
 
 namespace silver {
-Canvas::Canvas(Window* target) : target_(target) {
+Canvas::Canvas(Window* target) : target_(target), points_{} {
   auto window_size = target_->window_.getSize();
   background_.create(window_size.x, window_size.y);
 }
 
-void Canvas::DrawPoint(const glm::vec2& point) {
+void Canvas::AddPoint(const glm::vec2& point) {
   std::cout << std::format("{} {}", point.x, point.y) << std::endl;
-  auto vertex = sf::Vertex(sf::Vector2f{point.x, point.y}, sf::Color::White);
-  target_->window_.draw(&vertex, 1, sf::Points);
+  points_.push_back(
+      sf::Vertex(sf::Vector2f{point.x, point.y}, sf::Color::White));
+}
+
+void Canvas::Draw() {
+  for (auto& point : points_) {
+    target_->window_.draw(&point, 1, sf::Points);
+  }
+}
+
+void Canvas::Clear() {
+  points_.clear();
+}
+
+void Canvas::OnUpdate(float delta_time) {
+  Draw();
 }
 
 }  // namespace silver

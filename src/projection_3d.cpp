@@ -33,7 +33,7 @@ glm::vec2 Projection3d::Project(const glm::vec3& vec) {
   }
   glm::vec2 r2_space = glm::vec2{result.x, result.y};
   r2_space += glm::vec2{1.0f, 1.0f};
-  r2_space *= glm::vec2{space_width_, space_height_};
+  r2_space *= glm::vec2{space_width_ / 10, space_height_ / 10};
   return r2_space;
 }
 }  // namespace silver

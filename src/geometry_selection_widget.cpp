@@ -65,8 +65,14 @@ tl::expected<std::vector<std::string>, std::string> OpenDialog() {
 
 GeometrySelectionWidget::GeometrySelectionWidget() : on_selected_callbacks_{} {}
 
-void GeometrySelectionWidget::AddCallback(const CallbackType& callback) {
+void GeometrySelectionWidget::AddLoadCallback(
+    const LoadCallbackType& callback) {
   on_selected_callbacks_.push_back(callback);
+}
+
+void GeometrySelectionWidget::AddClearCallback(
+    const ClearCallbackType& callback) {
+  on_clear_callbacks_.push_back(callback);
 }
 
 void GeometrySelectionWidget::SelectGeometrys() {
@@ -82,10 +88,19 @@ void GeometrySelectionWidget::SelectGeometrys() {
   }
 }
 
+void GeometrySelectionWidget::ClearGeometrys() {
+  for (auto& callback : on_clear_callbacks_) {
+    callback();
+  }
+}
+
 void GeometrySelectionWidget::Render() {
   ImGui::Begin("Geometry Selection");
   if (ImGui::Button("Load Geometry")) {
     SelectGeometrys();
+  }
+  if (ImGui::Button("Clear Geometry")) {
+    ClearGeometrys();
   }
   ImGui::End();
 }

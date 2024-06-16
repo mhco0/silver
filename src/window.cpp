@@ -2,6 +2,7 @@
 // Copyright (c)
 
 #include <format>
+#include <iostream>
 #include <string_view>
 
 #include <imgui-SFML.h>
@@ -35,13 +36,19 @@ Window::~Window() {
 }
 
 void Window::AddWidget(IWidget* widget) {
-  widgets_.push_back(widget);
+  nodes_.push_back(widget);
+}
+
+void Window::AddNode(INode* node) {
+  nodes_.push_back(node);
 }
 
 void Window::MainLoop() {
   ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
   ImGuiIO& io = ImGui::GetIO();
   sf::Clock delta_clock;
+
+  window_.setFramerateLimit(60);
 
   while (window_.isOpen()) {
     sf::Event event;
@@ -52,13 +59,17 @@ void Window::MainLoop() {
         window_.close();
       }
     }
+    window_.clear(clear_color);
 
     ImGui::SFML::Update(window_, delta_clock.restart());
-    for (const auto& widget : widgets_) {
-      widget->Render();
+    for (const auto& node : nodes_) {
+      IWidget* node_as_widget = dynamic_cast<IWidget*>(node);
+      if (node_as_widget != nullptr) {
+        node_as_widget->Render();
+      }
+      node->OnUpdate(delta_clock.getElapsedTime().asSeconds());
     }
 
-    window_.clear(clear_color);
     ImGui::SFML::Render(window_);
     window_.display();
   }

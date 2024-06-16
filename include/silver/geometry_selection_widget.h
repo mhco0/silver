@@ -12,17 +12,21 @@
 namespace silver {
 class GeometrySelectionWidget : public IWidget {
  public:
-  using CallbackType = std::function<void(std::vector<std::string>)>;
+  using LoadCallbackType = std::function<void(std::vector<std::string>)>;
+  using ClearCallbackType = std::function<void(void)>;
 
   explicit GeometrySelectionWidget();
 
   void Render() override;
 
-  void AddCallback(const CallbackType& callback);
+  void AddLoadCallback(const LoadCallbackType& callback);
+  void AddClearCallback(const ClearCallbackType& callback);
 
   void SelectGeometrys();
+  void ClearGeometrys();
 
  private:
-  std::vector<CallbackType> on_selected_callbacks_;
+  std::vector<LoadCallbackType> on_selected_callbacks_;
+  std::vector<ClearCallbackType> on_clear_callbacks_;
 };
 }  // namespace silver

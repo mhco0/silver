@@ -34,8 +34,9 @@ set(silver_SRCS
     ./src/utils.cpp
     ./src/camera_controller_widget.cpp
     ./src/canvas.cpp
-    ./src/geometry_selection_widget.cpp)
-    
+    ./src/geometry_selection_widget.cpp
+    ./src/camera.cpp)
+
 set(silver_HRDS
     ./include/silver/application.h
     ./include/silver/camera_3d.h
@@ -45,7 +46,8 @@ set(silver_HRDS
     ./include/silver/i_widget.h
     ./include/silver/camera_controller_widget.h
     ./include/silver/canvas.h
-    ./include/silver/geometry_selection_widget.h)
+    ./include/silver/geometry_selection_widget.h
+    ./include/silver/i_node.h)
 
 add_executable(silver ${silver_SRCS} ${silver_HRDS})
 target_link_libraries(

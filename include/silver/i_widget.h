@@ -3,9 +3,11 @@
 
 #pragma once
 
+#include "silver/i_node.h"
+
 namespace silver {
 
-class IWidget {
+class IWidget : public INode {
  public:
   virtual void Render() = 0;
 };
