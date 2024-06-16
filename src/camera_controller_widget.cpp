@@ -35,6 +35,9 @@ void CameraControllerWidget::Render() {
   if (value_changed) {
     camera_->Orthonomalize();
   }
+  if (ImGui::Button("Reset")) {
+    camera_->Reset();
+  }
   ImGui::End();
 }
 

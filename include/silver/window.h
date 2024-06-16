@@ -13,6 +13,7 @@
 
 namespace silver {
 class Canvas;
+class Projection3d;
 class Window {
  public:
   Window(int width, int height, const std::string_view& title);
@@ -28,6 +29,8 @@ class Window {
  private:
   sf::RenderWindow window_;
   std::vector<INode*> nodes_;
+
   friend class Canvas;
+  friend class Projection3d;
 };
 }  // namespace silver

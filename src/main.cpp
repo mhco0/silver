@@ -13,30 +13,31 @@
 #include <silver/camera_controller_widget.h>
 #include <silver/canvas.h>
 #include <silver/geometry_selection_widget.h>
+#include <silver/projection_3d.h>
 #include <silver/utils.h>
 #include <silver/window.h>
 
 int main(void) {
   silver::Window window(800, 600, "Silver Surface Viewer");
-  silver::Canvas canvas(&window);
   silver::Camera3d camera;
   silver::CameraControllerWidget camera_widget(&camera);
+  silver::Projection3d projection(&camera, &window);
+  silver::Canvas canvas(&window, &projection);
   silver::GeometrySelectionWidget geometry_selection_widget;
-  silver::Projection3d projection(80, 60, 75, 12.0, 1);
 
   window.AddWidget(&camera_widget);
   window.AddWidget(&geometry_selection_widget);
   window.AddNode(&canvas);
 
-  auto draw_geometry =
+  auto add_geometry =
       [&canvas, &projection](const std::vector<std::string>& paths) -> void {
-    auto geometry = silver::LoadGeometry(paths.at(0));
-    for (const auto& point : geometry.value()) {
-      canvas.AddPoint(projection.Project(point));
+    for (const auto& path : paths) {
+      auto geometry = silver::LoadGeometry(path);
+      canvas.AddObject(geometry.value());
     }
   };
 
-  geometry_selection_widget.AddLoadCallback(draw_geometry);
+  geometry_selection_widget.AddLoadCallback(add_geometry);
 
   auto clear_geometrys = [&canvas]() -> void {
     canvas.Clear();

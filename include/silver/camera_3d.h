@@ -2,13 +2,13 @@
 // Copyright (c)
 #pragma once
 
+#include <glm/mat3x3.hpp>
 #include <glm/vec3.hpp>
-
-#include "silver/projection_3d.h"
 
 namespace silver {
 
 class CameraControllerWidget;
+class Projection3d;
 
 class Camera3d {
  public:
@@ -16,15 +16,22 @@ class Camera3d {
 
   void Orthonomalize();
 
+  void Reset();
+
+  glm::vec3 Translate(const glm::vec3& point);
+
  protected:
   glm::vec3 focus_;
   glm::vec3 n_;
   glm::vec3 v_;
   glm::vec3 u_;
+  glm::mat3x3 basis_;
   float distance_from_projection_;
   float camera_height_;
   float camera_width_;
+
   friend class CameraControllerWidget;
+  friend class Projection3d;
 };
 
 }  // namespace silver

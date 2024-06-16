@@ -2,22 +2,21 @@
 // Copyright (c)
 #pragma once
 
-#include <glm/mat4x4.hpp>
 #include <glm/vec2.hpp>
 #include <glm/vec3.hpp>
-#include <glm/vec4.hpp>
+
+#include "silver/camera_3d.h"
+#include "silver/window.h"
 
 namespace silver {
 class Projection3d {
  public:
-  Projection3d(int space_width, int space_height, double fov, double z_far,
-               double z_near);
+  Projection3d(Camera3d* camera, Window* window);
 
   glm::vec2 Project(const glm::vec3& vec);
 
  private:
-  int space_width_;
-  int space_height_;
-  glm::mat4x4 projection_matrix_;
+  Camera3d* camera_;
+  Window* window_;
 };
 }  // namespace silver

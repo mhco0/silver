@@ -34,7 +34,7 @@ class Application {
     return instance;
   }
 
-  Window* main_window_;
+  Window* main_window_{};
 };
 
 }  // namespace silver
