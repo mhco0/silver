@@ -61,9 +61,9 @@ tl::expected<std::vector<Triangle>, std::string_view> LoadGeometry(
           vertices[i][j],
       }));
       triangles.push_back(Triangle({
-          vertices[i][j + 1],
-          vertices[i + 1][j + 1],
           vertices[i + 1][j],
+          vertices[i + 1][j + 1],
+          vertices[i][j + 1],
       }));
     }
   }

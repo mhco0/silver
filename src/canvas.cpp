@@ -45,7 +45,7 @@ void Canvas::DrawPoint(const glm::vec2& point) {
 }
 
 void Canvas::DrawPoints(const std::vector<glm::vec2>& points) {
-  sf::VertexArray vertexs(sf::Points, points.size());
+  sf::VertexArray vertexs(sf::Lines, points.size());
   for (int i = 0; i < points.size(); ++i) {
     vertexs[i].position = sf::Vector2f{points[i].x, points[i].y};
     vertexs[i].color = sf::Color::Blue;
@@ -82,11 +82,11 @@ void Canvas::FillTriangle(Triangle& triangle) {
     projected_triangle[i] = glm::vec2{tryout[i].second, tryout[i].first};
   }
 
-  for (int i = 0; i < projected_triangle.size(); ++i) {
-    std::cout << std::format("{}: {:1f} {:1f} \n", i,
-                             std::round(projected_triangle[i].x),
-                             std::round(projected_triangle[i].y));
-  }
+  // for (int i = 0; i < projected_triangle.size(); ++i) {
+  //   std::cout << std::format("{}: {:1f} {:1f} \n", i,
+  //                            std::round(projected_triangle[i].x),
+  //                            std::round(projected_triangle[i].y));
+  // }
 
   // auto get_slope = [](const glm::vec2& p2, const glm::vec2& p1) -> float {
   //   return (p2.y - p1.y) / (p2.x - p1.x);
@@ -171,7 +171,16 @@ void Canvas::FillTriangle(Triangle& triangle) {
 void Canvas::Draw() {
   for (auto& object : objects_) {
     for (auto& triangule : object) {
-      FillTriangle(triangule);
+      //FillTriangle(triangule);
+      DrawPoints({
+          projection_->Project(triangule.vertices[0]),
+          projection_->Project(triangule.vertices[1]),
+          projection_->Project(triangule.vertices[1]),
+          projection_->Project(triangule.vertices[2]),
+          projection_->Project(triangule.vertices[2]),
+          projection_->Project(triangule.vertices[0]),
+      });
+
       //DrawPoint(projection_->Project(triangule.vertices[0]));
       //DrawPoint(projection_->Project(triangule.vertices[1]));
       //DrawPoint(projection_->Project(triangule.vertices[2]));
