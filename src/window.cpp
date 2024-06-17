@@ -44,7 +44,7 @@ void Window::AddNode(INode* node) {
 }
 
 void Window::MainLoop() {
-  ImVec4 clear_color = ImVec4(0.0f, 0.0f, 0.0f, 1.00f);
+  sf::Color clear_color = sf::Color(0, 0, 0, 255);
   ImGuiIO& io = ImGui::GetIO();
   sf::Clock delta_clock;
 

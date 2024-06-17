@@ -47,7 +47,8 @@ set(silver_HRDS
     ./include/silver/camera_controller_widget.h
     ./include/silver/canvas.h
     ./include/silver/geometry_selection_widget.h
-    ./include/silver/i_node.h)
+    ./include/silver/i_node.h
+    ./include/silver/triangle.h)
 
 add_executable(silver ${silver_SRCS} ${silver_HRDS})
 target_link_libraries(
@@ -74,7 +75,18 @@ set(gtest_force_shared_crt
 set(silver_TESTS ./src/utils_test.cpp)
 add_executable(silver_tests ${silver_SRCS} ${silver_HRDS} ${silver_TESTS})
 
-target_link_libraries(silver_tests PRIVATE OpenGL::GL glm::glm imgui::imgui
-                                           tl::expected GTest::gtest_main)
+target_link_libraries(
+  silver_tests
+  PRIVATE OpenGL::GL
+          glm::glm
+          imgui::imgui
+          tl::expected
+          unofficial::nativefiledialog::nfd
+          sfml-system
+          sfml-network
+          sfml-graphics
+          sfml-window
+          ImGui-SFML::ImGui-SFML
+          GTest::gtest_main)
 add_test(NAME silver_test COMMAND silver_tests)
 gtest_discover_tests(silver_tests)

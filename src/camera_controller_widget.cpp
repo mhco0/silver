@@ -2,6 +2,7 @@
 // Copyright (c)
 
 #include <format>
+#include <iostream>
 
 #include <imgui.h>
 #include <glm/gtc/type_ptr.hpp>
@@ -14,24 +15,37 @@ CameraControllerWidget::CameraControllerWidget(Camera3d* camera)
 
 void CameraControllerWidget::Render() {
   ImGui::Begin("Camera Controller");
+  ImGui::Text("x");
+  ImGui::SameLine();
+  ImGui::Text("y");
+  ImGui::SameLine();
+  ImGui::Text("z");
   bool value_changed = false;
-  value_changed = value_changed ||
-                  ImGui::SliderFloat3("Normal", glm::value_ptr(camera_->n_),
-                                      0.0f, 1.0f, "%.2f");
-  value_changed = value_changed ||
-                  ImGui::SliderFloat3("Forward", glm::value_ptr(camera_->v_),
-                                      0.0f, 1.0f, "%.2f");
+  value_changed =
+      value_changed ||
+      ImGui::SliderFloat3("Normal", glm::value_ptr(camera_->n_), -1.0f, 1.0f,
+                          "%.2f", ImGuiSliderFlags_NoRoundToFormat);
+  value_changed =
+      value_changed ||
+      ImGui::SliderFloat3("Forward", glm::value_ptr(camera_->v_), -1.0f, 1.0f,
+                          "%.2f", ImGuiSliderFlags_NoRoundToFormat);
   ImGui::BeginDisabled();
   ImGui::SliderFloat3("Cross Normal x Forward", glm::value_ptr(camera_->u_),
                       0.0, 1.0, "%.2f", ImGuiSliderFlags_NoInput);
   ImGui::EndDisabled();
-  value_changed = value_changed ||
-                  ImGui::SliderFloat3("Focus", glm::value_ptr(camera_->focus_),
-                                      0.0f, 1.0f, "%.2f");
+  value_changed =
+      value_changed ||
+      ImGui::SliderFloat3("Focus", glm::value_ptr(camera_->focus_), -10.0f,
+                          10.0f, "%.2f", ImGuiSliderFlags_NoRoundToFormat);
   value_changed =
       value_changed ||
       ImGui::SliderFloat("Distance from projection",
-                         &camera_->distance_from_projection_, 0.0, 100.0f);
+                         &camera_->distance_from_projection_, 0.5f, 100.00f,
+                         "%.2f", ImGuiSliderFlags_NoRoundToFormat);
+  value_changed =
+      value_changed ||
+      ImGui::SliderFloat2("", glm::value_ptr(camera_->visible_area_), 1.0f,
+                          10.f, "%.2f", ImGuiSliderFlags_NoRoundToFormat);
   if (value_changed) {
     camera_->Orthonomalize();
   }

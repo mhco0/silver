@@ -3,7 +3,9 @@
 #pragma once
 
 #include <glm/mat3x3.hpp>
+#include <glm/vec2.hpp>
 #include <glm/vec3.hpp>
+
 
 namespace silver {
 
@@ -26,9 +28,8 @@ class Camera3d {
   glm::vec3 v_;
   glm::vec3 u_;
   glm::mat3x3 basis_;
+  glm::vec2 visible_area_;
   float distance_from_projection_;
-  float camera_height_;
-  float camera_width_;
 
   friend class CameraControllerWidget;
   friend class Projection3d;

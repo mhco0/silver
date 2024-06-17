@@ -11,6 +11,7 @@
 
 #include "silver/i_node.h"
 #include "silver/projection_3d.h"
+#include "silver/triangle.h"
 #include "silver/window.h"
 
 namespace silver {
@@ -18,11 +19,12 @@ class Canvas : public INode {
  public:
   Canvas(Window* target, Projection3d* projection);
 
-  void AddObject(const std::vector<glm::vec3>& object);
+  void AddObject(const std::vector<Triangle>& object);
 
   void DrawPoint(const glm::vec2& point);
+  void DrawPoints(const std::vector<glm::vec2>& points);
   void Draw();
-  void FillTriangle(std::array<glm::vec2, 3>& triangle);
+  void FillTriangle(Triangle& triangle);
 
   void Clear();
 
@@ -31,6 +33,6 @@ class Canvas : public INode {
  private:
   Window* target_;
   Projection3d* projection_;
-  std::vector<std::vector<glm::vec3>> objects_;
+  std::vector<std::vector<Triangle>> objects_;
 };
 }  // namespace silver

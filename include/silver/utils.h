@@ -10,9 +10,9 @@
 #include <glm/vec3.hpp>
 #include <tl/expected.hpp>
 
+#include "silver/triangle.h"
 
 namespace silver {
-tl::expected<std::vector<glm::vec3>, std::string_view> LoadGeometry(
+tl::expected<std::vector<Triangle>, std::string_view> LoadGeometry(
     const std::string& path_file);
-
-};
+};  // namespace silver
