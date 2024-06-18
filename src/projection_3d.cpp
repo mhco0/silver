@@ -1,6 +1,10 @@
 // Created by Marcos Oliveira <mhco@cin.ufpe.br> on 05/20/2024.
 // Copyright (c)
 
+#include <format>
+#include <iostream>
+#include <optional>
+
 #include <glm/gtc/epsilon.hpp>
 #include <glm/mat4x4.hpp>
 #include <glm/trigonometric.hpp>
@@ -16,22 +20,31 @@ namespace silver {
 Projection3d::Projection3d(Camera3d* camera, Window* window)
     : camera_(camera), window_(window) {}
 
-glm::vec2 Projection3d::Project(const glm::vec3& vec) {
+std::optional<glm::vec2> Projection3d::Project(const glm::vec3& vec) {
   glm::vec3 camera_view = camera_->Translate(vec);
-  if (glm::epsilonNotEqual(camera_view.z, 0.0f, 1e-6f)) {
-    camera_view /= camera_view.z;
-  }
   glm::vec3 projection_point = glm::vec3{
-      camera_view.x * camera_->distance_from_projection_,
-      camera_view.y * camera_->distance_from_projection_,
+      camera_view.x * camera_->distance_from_projection_ / camera_view.z,
+      camera_view.y * camera_->distance_from_projection_ / camera_view.z,
       camera_->distance_from_projection_,
   };
-  projection_point.x /= camera_->visible_area_.x;
-  projection_point.y /= camera_->visible_area_.y;
+
+  auto out_of_screen = [this](float x, float y) {
+    return -camera_->visible_area_.x > x || x > camera_->visible_area_.x ||
+           y > camera_->visible_area_.y || y < -camera_->visible_area_.y;
+  };
+
+  if (out_of_screen(projection_point.x, projection_point.y)) {
+    return std::nullopt;
+  }
+
+  projection_point.x = projection_point.x / camera_->visible_area_.x;
+  projection_point.y = projection_point.y / camera_->visible_area_.y;
 
   auto window_size = window_->window_.getSize();
 
-  return glm::vec2{((projection_point.x + 1) / 2) * window_size.x,
-                   ((1 - projection_point.y) / 2) * window_size.y};
+  glm::vec2 screen_pos{int(((projection_point.x + 1) * window_size.x) / 2),
+                       int(((1 - projection_point.y) * window_size.y) / 2)};
+
+  return screen_pos;
 }
 }  // namespace silver

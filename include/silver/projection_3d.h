@@ -2,6 +2,8 @@
 // Copyright (c)
 #pragma once
 
+#include <optional>
+
 #include <glm/vec2.hpp>
 #include <glm/vec3.hpp>
 
@@ -13,7 +15,7 @@ class Projection3d {
  public:
   Projection3d(Camera3d* camera, Window* window);
 
-  glm::vec2 Project(const glm::vec3& vec);
+  std::optional<glm::vec2> Project(const glm::vec3& vec);
 
  private:
   Camera3d* camera_;
