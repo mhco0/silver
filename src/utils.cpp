@@ -3,7 +3,6 @@
 
 #include <format>
 #include <fstream>
-#include <iostream>
 #include <string>
 #include <string_view>
 #include <vector>
@@ -43,15 +42,6 @@ tl::expected<std::vector<Triangle>, std::string_view> LoadGeometry(
     }
   }
 
-  // for (int i = 0; i < vertices.size(); ++i) {
-  //   for (int j = 0; j < vertices[i].size(); ++j) {
-  //     std::cout << std::format("{}, {}: {} {} {} \n", i, j, vertices[i][j].x,
-  //                              vertices[i][j].y, vertices[i][j].z);
-  //   }
-  //   std::cout << std::endl;
-  // }
-  // std::cout << std::endl;
-
   std::vector<Triangle> triangles;
   for (int i = 0; i <= vertices.size() - 2; ++i) {
     for (int j = 0; j <= vertices[i].size() - 2; ++j) {
@@ -67,14 +57,6 @@ tl::expected<std::vector<Triangle>, std::string_view> LoadGeometry(
       }));
     }
   }
-
-  // for (const auto& triangule : triangles) {
-  //   for (int i = 0; i < triangule.vertices.size(); ++i) {
-  //     std::cout << std::format("{}: {} {} {}\n", i, triangule.vertices[i].x,
-  //                              triangule.vertices[i].y,
-  //                              triangule.vertices[i].z);
-  //   }
-  // }
 
   int total_triangles = (u_coords - 1) * (v_coords - 1) * 2;
   if (total_triangles != static_cast<int>(triangles.size())) {

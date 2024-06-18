@@ -2,7 +2,6 @@
 // Copyright (c)
 
 #include <format>
-#include <iostream>
 #include <optional>
 
 #include <glm/gtc/epsilon.hpp>

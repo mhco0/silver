@@ -2,7 +2,6 @@
 // Copyright (c)
 #pragma once
 
-#include <iostream>
 #include <memory>
 
 #include "silver/window.h"

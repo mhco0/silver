@@ -2,7 +2,6 @@
 // Copyright (c)
 
 #include <format>
-#include <iostream>
 
 #include <glm/geometric.hpp>
 #include <glm/glm.hpp>
