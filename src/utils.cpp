@@ -34,7 +34,7 @@ tl::expected<std::vector<Triangle>, std::string_view> LoadGeometry(
   int u = 0;
   int v = 0;
   while (num_points++ < total_points) {
-    glm::vec3 point;
+    glm::vec3 point{};
     file >> point.x >> point.y >> point.z;
     vertices[u][v] = point;
     v = (v + 1) % v_coords;
@@ -43,27 +43,27 @@ tl::expected<std::vector<Triangle>, std::string_view> LoadGeometry(
     }
   }
 
-  // for (int i = 0; i < vertices.size(); ++i) {
-  //   for (int j = 0; j < vertices[i].size(); ++j) {
-  //     std::cout << std::format("{}, {}: {} {} {} \n", i, j, vertices[i][j].x,
-  //                              vertices[i][j].y, vertices[i][j].z);
-  //   }
-  //   std::cout << std::endl;
-  // }
-  // std::cout << std::endl;
+  for (int i = 0; i < vertices.size(); ++i) {
+    for (int j = 0; j < vertices[i].size(); ++j) {
+      std::cout << std::format("{}, {}: {} {} {} \n", i, j, vertices[i][j].x,
+                               vertices[i][j].y, vertices[i][j].z);
+    }
+    std::cout << std::endl;
+  }
+  std::cout << std::endl;
 
   std::vector<Triangle> triangles;
   for (int i = 0; i <= vertices.size() - 2; ++i) {
     for (int j = 0; j <= vertices[i].size() - 2; ++j) {
-      triangles.push_back(Triangle({
-          vertices[i][j + 1],
-          vertices[i + 1][j],
+      triangles.push_back(Triangle(std::array<glm::vec3, 3>{
           vertices[i][j],
-      }));
-      triangles.push_back(Triangle({
-          vertices[i + 1][j],
-          vertices[i + 1][j + 1],
           vertices[i][j + 1],
+          vertices[i + 1][j],
+      }));
+      triangles.push_back(Triangle(std::array<glm::vec3, 3>{
+          vertices[i][j + 1],
+          vertices[i + 1][j + 1],
+          vertices[i + 1][j],
       }));
     }
   }

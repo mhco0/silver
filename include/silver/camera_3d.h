@@ -27,7 +27,6 @@ class Camera3d {
   glm::vec3 n_;
   glm::vec3 v_;
   glm::vec3 u_;
-  glm::mat3x3 basis_;
   glm::vec2 visible_area_;
   float distance_from_projection_;
 
