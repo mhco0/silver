@@ -37,36 +37,39 @@ std::vector<glm::vec2> ScanLine(glm::vec2 p0, glm::vec2 p1, glm::vec2 p2) {
   if (p1.y > p2.y) {
     std::swap(p1, p2);
   }
-  if (p0.y > p2.y) {
-    std::swap(p0, p2);
+  if (p0.y > p1.y) {
+    std::swap(p0, p1);
   }
 
-  int x1 = p0.x, y1 = p0.y;
-  int x2 = p1.x, y2 = p1.y;
-  int x3 = p2.x, y3 = p2.y;
+  int x0 = p0.x;
+  int y0 = p0.y;
+  int x1 = p1.x;
+  int y1 = p1.y;
+  int x2 = p2.x;
+  int y2 = p2.y;
 
-  auto interpolate = [](int y, int y1, int x1, int y2, int x2) {
-    return x1 + (x2 - x1) * (y - y1) / (y2 - y1);
+  auto interpolate = [](int y, int y0, int x0, int y1, int x1) {
+    return x0 + (x1 - x0) * (y - y0) / (y1 - y0);
   };
 
   std::vector<glm::vec2> points;
-  for (int y = y1; y <= y2; y++) {
-    int start_x = (y2 != y1) ? interpolate(y, y1, x1, y2, x2) : x1;
-    int end_x = (y3 != y1) ? interpolate(y, y1, x1, y3, x3) : x3;
+  for (int y = y0; y <= y1; y++) {
+    int start_x = (y1 != y0) ? interpolate(y, y0, x0, y1, x1) : x0;
+    int end_x = (y2 != y0) ? interpolate(y, y0, x0, y2, x2) : x2;
     if (start_x > end_x)
       std::swap(start_x, end_x);
     for (int x = start_x; x <= end_x; x++) {
-      points.emplace_back(y, x);
+      points.emplace_back(x, y);
     }
   }
 
-  for (int y = y2; y <= y3; y++) {
-    int start_x = (y2 != y3) ? interpolate(y, y2, x2, y3, x3) : x2;
-    int end_x = (y3 != y1) ? interpolate(y, y1, x1, y3, x3) : x1;
+  for (int y = y1; y <= y2; y++) {
+    int start_x = (y1 != y2) ? interpolate(y, y1, x1, y2, x2) : x2;
+    int end_x = (y2 != y0) ? interpolate(y, y0, x0, y2, x2) : x2;
     if (start_x > end_x)
       std::swap(start_x, end_x);
     for (int x = start_x; x <= end_x; x++) {
-      points.emplace_back(y, x);
+      points.emplace_back(x, y);
     }
   }
   return points;
