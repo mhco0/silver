@@ -54,7 +54,7 @@ std::vector<glm::vec2> ScanLine(glm::vec2 p0, glm::vec2 p1, glm::vec2 p2) {
 
   std::vector<glm::vec2> points;
   for (int y = y0; y <= y1; y++) {
-    int start_x = (y1 != y0) ? interpolate(y, y0, x0, y1, x1) : x0;
+    int start_x = (y1 != y0) ? interpolate(y, y0, x0, y1, x1) : x1;
     int end_x = (y2 != y0) ? interpolate(y, y0, x0, y2, x2) : x2;
     if (start_x > end_x)
       std::swap(start_x, end_x);
