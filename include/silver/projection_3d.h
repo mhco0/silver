@@ -11,6 +11,7 @@
 #include "silver/window.h"
 
 namespace silver {
+
 class Projection3d {
  public:
   Projection3d(Camera3d* camera, Window* window);

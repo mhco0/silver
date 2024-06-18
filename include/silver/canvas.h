@@ -5,11 +5,10 @@
 #include <array>
 #include <vector>
 
-#include <SFML/Graphics/Color.hpp>
 #include <SFML/Graphics/Vertex.hpp>
+#include <SFML/Graphics/Color.hpp>
 #include <glm/vec2.hpp>
 #include <glm/vec3.hpp>
-
 
 #include "silver/i_node.h"
 #include "silver/projection_3d.h"

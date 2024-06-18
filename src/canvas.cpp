@@ -10,6 +10,7 @@
 #include <SFML/Graphics/Color.hpp>
 #include <SFML/Graphics/Vertex.hpp>
 #include <SFML/Graphics/VertexArray.hpp>
+#include <glm/geometric.hpp>
 #include <glm/gtc/epsilon.hpp>
 #include <glm/vec2.hpp>
 #include <glm/vec3.hpp>
@@ -22,12 +23,31 @@
 namespace silver {
 
 namespace internal {
-glm::vec2 Baricenter(const std::array<glm::vec2, 3> triangle_vertices) {
-  return glm::vec2{(triangle_vertices[0].x + triangle_vertices[1].x +
-                    triangle_vertices[2].x) /
+glm::vec3 BaricenterCoordinates(
+    const std::array<glm::vec2, 3>& triangule_vertices,
+    const glm::vec2& point) {
+  glm::vec2 v0 = triangule_vertices[1] - triangule_vertices[0];
+  glm::vec2 v1 = triangule_vertices[2] - triangule_vertices[0];
+  glm::vec2 v2 = point - triangule_vertices[0];
+
+  float d00 = glm::dot(v0, v0);
+  float d01 = glm::dot(v0, v1);
+  float d11 = glm::dot(v1, v1);
+  float d20 = glm::dot(v2, v0);
+  float d21 = glm::dot(v2, v1);
+  float denom = d00 * d11 - d01 * d01;
+  float w = (d11 * d20 - d01 * d21) / denom;
+  float v = (d00 * d21 - d01 * d20) / denom;
+  float u = 1.0f - v - w;
+  return glm::vec3{u, v, w};
+}
+
+glm::vec2 Baricenter(const std::array<glm::vec2, 3>& triangule_vertices) {
+  return glm::vec2{(triangule_vertices[0].x + triangule_vertices[1].x +
+                    triangule_vertices[2].x) /
                        3.0,
-                   (triangle_vertices[0].y + triangle_vertices[1].y +
-                    triangle_vertices[2].y) /
+                   (triangule_vertices[0].y + triangule_vertices[1].y +
+                    triangule_vertices[2].y) /
                        3.0};
 }
 
@@ -101,13 +121,31 @@ void Canvas::DrawPoints(const std::vector<glm::vec2>& points,
 }
 
 void Canvas::FillTriangle(Triangle& triangle) {
+  std::array<glm::vec2, 3> projections = {
+      projection_->Project(triangle.vertices[0]).value(),
+      projection_->Project(triangle.vertices[1]).value(),
+      projection_->Project(triangle.vertices[2]).value()};
 
   std::vector<glm::vec2> points =
-      internal::ScanLine(projection_->Project(triangle.vertices[0]).value(),
-                         projection_->Project(triangle.vertices[1]).value(),
-                         projection_->Project(triangle.vertices[2]).value());
+      internal::ScanLine(projections[0], projections[1], projections[2]);
 
-  DrawPoints(points, sf::Color::White);
+  constexpr int kNumWhiteTones = 5;
+  constexpr int kWhiteTonesDelta = 255 / kNumWhiteTones;
+
+  std::vector<sf::Color> white_tones(kNumWhiteTones);
+  for (int i = 0, j = 0; i <= 255 && j < kNumWhiteTones;
+       i += kWhiteTonesDelta, ++j) {
+    white_tones[j] = sf::Color(i, i, i, 255);
+  }
+
+  auto baricenter = internal::Baricenter(projections);
+
+  auto tone_index =
+      static_cast<int>(((target_->window_.getSize().y - baricenter.y) /
+                        target_->window_.getSize().y) *
+                       kNumWhiteTones);
+
+  DrawPoints(points, white_tones[tone_index]);
 }
 
 void Canvas::Draw() {
