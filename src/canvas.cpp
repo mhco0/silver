@@ -7,6 +7,7 @@
 #include <iostream>
 #include <vector>
 
+#include <SFML/Graphics/Color.hpp>
 #include <SFML/Graphics/Vertex.hpp>
 #include <SFML/Graphics/VertexArray.hpp>
 #include <glm/gtc/epsilon.hpp>
@@ -83,17 +84,18 @@ void Canvas::AddObject(const std::vector<Triangle>& object) {
   objects_.push_back(object);
 }
 
-void Canvas::DrawPoint(const glm::vec2& point) {
-  auto vertex_point = sf::Vertex(
-      sf::Vector2f{std::round(point.x), std::round(point.y)}, sf::Color::Green);
+void Canvas::DrawPoint(const glm::vec2& point, const sf::Color& color) {
+  auto vertex_point =
+      sf::Vertex(sf::Vector2f{std::round(point.x), std::round(point.y)}, color);
   target_->window_.draw(&vertex_point, 1, sf::Points);
 }
 
-void Canvas::DrawPoints(const std::vector<glm::vec2>& points) {
-  sf::VertexArray vertexs(sf::Lines, points.size());
+void Canvas::DrawPoints(const std::vector<glm::vec2>& points,
+                        const sf::Color& color) {
+  sf::VertexArray vertexs(sf::Points, points.size());
   for (int i = 0; i < points.size(); ++i) {
     vertexs[i].position = sf::Vector2f{points[i].x, points[i].y};
-    vertexs[i].color = sf::Color::Blue;
+    vertexs[i].color = color;
   }
   target_->window_.draw(vertexs);
 }
@@ -105,7 +107,7 @@ void Canvas::FillTriangle(Triangle& triangle) {
                          projection_->Project(triangle.vertices[1]).value(),
                          projection_->Project(triangle.vertices[2]).value());
 
-  DrawPoints(points);
+  DrawPoints(points, sf::Color::White);
 }
 
 void Canvas::Draw() {
@@ -115,20 +117,8 @@ void Canvas::Draw() {
       auto p1 = projection_->Project(triangule.vertices[1]);
       auto p2 = projection_->Project(triangule.vertices[2]);
       if (p0.has_value() && p1.has_value() && p2.has_value()) {
-        // DrawPoints({
-        //     p0.value(),
-        //     p1.value(),
-        //     p1.value(),
-        //     p2.value(),
-        //     p2.value(),
-        //     p0.value(),
-        // });
         FillTriangle(triangule);
       }
-
-      //DrawPoint(projection_->Project(triangule.vertices[0]));
-      //DrawPoint(projection_->Project(triangule.vertices[1]));
-      //DrawPoint(projection_->Project(triangule.vertices[2]));
     }
   }
 }

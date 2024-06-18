@@ -5,9 +5,11 @@
 #include <array>
 #include <vector>
 
+#include <SFML/Graphics/Color.hpp>
 #include <SFML/Graphics/Vertex.hpp>
 #include <glm/vec2.hpp>
 #include <glm/vec3.hpp>
+
 
 #include "silver/i_node.h"
 #include "silver/projection_3d.h"
@@ -21,8 +23,8 @@ class Canvas : public INode {
 
   void AddObject(const std::vector<Triangle>& object);
 
-  void DrawPoint(const glm::vec2& point);
-  void DrawPoints(const std::vector<glm::vec2>& points);
+  void DrawPoint(const glm::vec2& point, const sf::Color& color);
+  void DrawPoints(const std::vector<glm::vec2>& points, const sf::Color& color);
   void Draw();
   void FillTriangle(Triangle& triangle);
 
