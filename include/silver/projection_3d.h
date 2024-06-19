@@ -12,6 +12,8 @@
 
 namespace silver {
 
+class Canvas;
+
 class Projection3d {
  public:
   Projection3d(Camera3d* camera, Window* window);
@@ -21,5 +23,6 @@ class Projection3d {
  private:
   Camera3d* camera_;
   Window* window_;
+  friend class Canvas;
 };
 }  // namespace silver

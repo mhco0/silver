@@ -39,8 +39,8 @@ void CameraControllerWidget::Render() {
                                           0.1f, 100.00f, "%.2f");
   value_changed =
       value_changed ||
-      ImGui::SliderFloat2("", glm::value_ptr(camera_->visible_area_), 1.0f,
-                          10.f, "%.2f");
+      ImGui::SliderFloat2("hx | hy", glm::value_ptr(camera_->visible_area_),
+                          0.5f, 10.f, "%.2f");
   if (value_changed) {
     camera_->Orthonomalize();
   }

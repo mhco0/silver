@@ -5,6 +5,7 @@
 #include <array>
 #include <format>
 #include <iostream>
+#include <unordered_map>
 #include <vector>
 
 #include <SFML/Graphics/Color.hpp>
@@ -114,8 +115,20 @@ void Canvas::DrawPoints(const std::vector<glm::vec2>& points,
                         const sf::Color& color) {
   sf::VertexArray vertexs(sf::Points, points.size());
   for (int i = 0; i < points.size(); ++i) {
-    vertexs[i].position = sf::Vector2f{points[i].x, points[i].y};
+    vertexs[i].position =
+        sf::Vector2f{std::round(points[i].x), std::round(points[i].y)};
     vertexs[i].color = color;
+  }
+  target_->window_.draw(vertexs);
+}
+
+void Canvas::DrawPoints(const std::vector<glm::vec2>& points,
+                        const std::vector<sf::Color>& colors) {
+  sf::VertexArray vertexs(sf::Points, points.size());
+  for (int i = 0; i < points.size(); ++i) {
+    vertexs[i].position =
+        sf::Vector2f{std::round(points[i].x), std::round(points[i].y)};
+    vertexs[i].color = colors[i];
   }
   target_->window_.draw(vertexs);
 }
@@ -149,16 +162,62 @@ void Canvas::FillTriangle(Triangle& triangle) {
 }
 
 void Canvas::Draw() {
+  auto to_index_buffer = [](const glm::vec2& position, int columns) -> size_t {
+    size_t x_idx = static_cast<size_t>(std::round(position.x));
+    size_t y_idx = static_cast<size_t>(std::round(position.y));
+    return x_idx * columns + y_idx;
+  };
+
+  std::unordered_map<size_t, float> z_buffer;
+  std::unordered_map<size_t, sf::Color> colors;
+
+  auto color_by_point = [](const float& normalized_height) -> sf::Color {
+    glm::uint8 gray_scale = static_cast<glm::uint8>(normalized_height * 255.0f);
+    return sf::Color{gray_scale, gray_scale, gray_scale, 255};
+  };
+
+  std::vector<glm::vec2> render_points;
+  std::vector<sf::Color> render_colors;
+  auto size = target_->window_.getSize();
   for (auto& object : objects_) {
     for (auto& triangule : object) {
       auto p0 = projection_->Project(triangule.vertices[0]);
       auto p1 = projection_->Project(triangule.vertices[1]);
       auto p2 = projection_->Project(triangule.vertices[2]);
       if (p0.has_value() && p1.has_value() && p2.has_value()) {
-        FillTriangle(triangule);
+        std::vector<glm::vec2> points =
+            internal::ScanLine(p0.value(), p1.value(), p2.value());
+        for (const auto& point : points) {
+          glm::vec3 coeff = internal::BaricenterCoordinates(
+              {p0.value(), p1.value(), p2.value()}, point);
+          glm::vec3 view_point =
+              projection_->camera_->Translate(triangule.vertices[0]) * coeff.x +
+              projection_->camera_->Translate(triangule.vertices[1]) * coeff.y +
+              projection_->camera_->Translate(triangule.vertices[2]) * coeff.z;
+          size_t matriz_index = to_index_buffer(point, size.y);
+
+          if (!z_buffer.contains(matriz_index) ||
+              view_point.z < z_buffer[matriz_index]) {
+            auto baricenter =
+                internal::Baricenter({p0.value(), p1.value(), p2.value()});
+
+            colors[matriz_index] =
+                color_by_point((size.y - baricenter.y) / size.y);
+            z_buffer[matriz_index] = view_point.z;
+          }
+
+          render_points.push_back(point);
+        }
       }
     }
   }
+
+  for (const auto& point : render_points) {
+    size_t matriz_index = to_index_buffer(point, size.y);
+    render_colors.push_back(colors[matriz_index]);
+  }
+
+  DrawPoints(render_points, render_colors);
 }
 
 void Canvas::Clear() {

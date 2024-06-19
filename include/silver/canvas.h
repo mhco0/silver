@@ -5,8 +5,8 @@
 #include <array>
 #include <vector>
 
-#include <SFML/Graphics/Vertex.hpp>
 #include <SFML/Graphics/Color.hpp>
+#include <SFML/Graphics/Vertex.hpp>
 #include <glm/vec2.hpp>
 #include <glm/vec3.hpp>
 
@@ -24,6 +24,8 @@ class Canvas : public INode {
 
   void DrawPoint(const glm::vec2& point, const sf::Color& color);
   void DrawPoints(const std::vector<glm::vec2>& points, const sf::Color& color);
+  void DrawPoints(const std::vector<glm::vec2>& points,
+                  const std::vector<sf::Color>& colors);
   void Draw();
   void FillTriangle(Triangle& triangle);
 
