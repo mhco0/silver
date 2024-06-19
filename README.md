@@ -17,3 +17,9 @@ git submodule update
 ```
 
 Now you should be able to build and run silver modules on your computer.
+
+# Little Preview
+
+If you run from this project you should be able to see some surfaces under [`/assets`](./assets/) folder. Here is some example of the project running:
+
+![Silver preview](./assets/view%20example.jpg)
