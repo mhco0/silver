@@ -74,10 +74,18 @@ std::vector<glm::vec2> ScanLine(glm::vec2 p0, glm::vec2 p1, glm::vec2 p2) {
     return x0 + (x1 - x0) * (y - y0) / (y1 - y0);
   };
 
+  float a01 = (y1 != y0) ? (x1 - x0) / (1.0f * (y1 - y0)) : 0.0f;
+  float a02 = (y2 != y0) ? (x2 - x0) / (1.0f * (y2 - y0)) : 0.0f;
+
+  int start_x = x0;
+  int end_x = x1;
+
   std::vector<glm::vec2> points;
   for (int y = y0; y <= y1; y++) {
-    int start_x = (y1 != y0) ? interpolate(y, y0, x0, y1, x1) : x1;
-    int end_x = (y2 != y0) ? interpolate(y, y0, x0, y2, x2) : x2;
+    //int start_x = (y1 != y0) ? interpolate(y, y0, x0, y1, x1) : x1;
+    //int end_x = (y2 != y0) ? interpolate(y, y0, x0, y2, x2) : x2;
+    start_x += a01;
+    end_x += a02;
     if (start_x > end_x)
       std::swap(start_x, end_x);
     for (int x = start_x; x <= end_x; x++) {
@@ -85,9 +93,15 @@ std::vector<glm::vec2> ScanLine(glm::vec2 p0, glm::vec2 p1, glm::vec2 p2) {
     }
   }
 
+  float a12 = (y2 != y1) ? (x2 - x1) / (1.0f * (y2 - y1)) : 0.0f;
+  start_x = x1;
+  end_x = x2;
+
   for (int y = y1; y <= y2; y++) {
-    int start_x = (y1 != y2) ? interpolate(y, y1, x1, y2, x2) : x2;
-    int end_x = (y2 != y0) ? interpolate(y, y0, x0, y2, x2) : x2;
+    // int start_x = (y1 != y2) ? interpolate(y, y1, x1, y2, x2) : x2;
+    // int end_x = (y2 != y0) ? interpolate(y, y0, x0, y2, x2) : x2;
+    start_x += a12;
+    end_x += a02;
     if (start_x > end_x)
       std::swap(start_x, end_x);
     for (int x = start_x; x <= end_x; x++) {
@@ -207,6 +221,7 @@ void Canvas::Draw() {
           }
 
           render_points.push_back(point);
+          //DrawPoints({p0.value(), p1.value(), p2.value()}, sf::Color::Green);
         }
       }
     }
