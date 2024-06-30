@@ -82,10 +82,10 @@ std::vector<glm::vec2> ScanLine(glm::vec2 p0, glm::vec2 p1, glm::vec2 p2) {
 
   std::vector<glm::vec2> points;
   for (int y = y0; y <= y1; y++) {
-    //int start_x = (y1 != y0) ? interpolate(y, y0, x0, y1, x1) : x1;
-    //int end_x = (y2 != y0) ? interpolate(y, y0, x0, y2, x2) : x2;
-    start_x += a01;
-    end_x += a02;
+    int start_x = (y1 != y0) ? interpolate(y, y0, x0, y1, x1) : x1;
+    int end_x = (y2 != y0) ? interpolate(y, y0, x0, y2, x2) : x2;
+    //start_x += a01;
+    //end_x += a02;
     if (start_x > end_x)
       std::swap(start_x, end_x);
     for (int x = start_x; x <= end_x; x++) {
@@ -98,10 +98,10 @@ std::vector<glm::vec2> ScanLine(glm::vec2 p0, glm::vec2 p1, glm::vec2 p2) {
   end_x = x2;
 
   for (int y = y1; y <= y2; y++) {
-    // int start_x = (y1 != y2) ? interpolate(y, y1, x1, y2, x2) : x2;
-    // int end_x = (y2 != y0) ? interpolate(y, y0, x0, y2, x2) : x2;
-    start_x += a12;
-    end_x += a02;
+    int start_x = (y1 != y2) ? interpolate(y, y1, x1, y2, x2) : x2;
+    int end_x = (y2 != y0) ? interpolate(y, y0, x0, y2, x2) : x2;
+    //start_x += a12;
+    //end_x += a02;
     if (start_x > end_x)
       std::swap(start_x, end_x);
     for (int x = start_x; x <= end_x; x++) {

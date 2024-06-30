@@ -35,7 +35,8 @@ set(silver_SRCS
     ./src/camera_controller_widget.cpp
     ./src/canvas.cpp
     ./src/geometry_selection_widget.cpp
-    ./src/camera.cpp)
+    ./src/camera.cpp
+    ./src/nurbs.cpp)
 
 set(silver_HRDS
     ./include/silver/application.h
@@ -48,7 +49,8 @@ set(silver_HRDS
     ./include/silver/canvas.h
     ./include/silver/geometry_selection_widget.h
     ./include/silver/i_node.h
-    ./include/silver/triangle.h)
+    ./include/silver/triangle.h
+    ./include/silver/nurbs.h)
 
 add_executable(silver ${silver_SRCS} ${silver_HRDS})
 target_link_libraries(
@@ -63,6 +65,7 @@ target_link_libraries(
           imgui::imgui
           tl::expected
           unofficial::nativefiledialog::nfd)
+
 
 # Tests
 include(GoogleTest)

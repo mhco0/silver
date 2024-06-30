@@ -2,6 +2,7 @@
 // Copyright (c)
 
 #include <format>
+#include <iostream>
 #include <string>
 #include <vector>
 
@@ -12,6 +13,7 @@
 #include <silver/camera_controller_widget.h>
 #include <silver/canvas.h>
 #include <silver/geometry_selection_widget.h>
+#include <silver/nurbs.h>
 #include <silver/projection_3d.h>
 #include <silver/utils.h>
 #include <silver/window.h>
@@ -33,6 +35,13 @@ int main(void) {
     for (const auto& path : paths) {
       auto geometry = silver::LoadGeometry(path);
       canvas.AddObject(geometry.value());
+      // auto nurbs_and_camera_config = silver::LoadNurbsAndCameraConfig(path);
+
+      // if (nurbs_and_camera_config.has_value()) {
+      //   auto [nurbs_config, camera_config] = nurbs_and_camera_config.value();
+      //   auto surface = silver::Nurbs(nurbs_config);
+      //   silver::SaveSurface(surface, "./assets/nurbs2.txt");
+      // }
     }
   };
 

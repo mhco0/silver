@@ -6,11 +6,18 @@
 #include <glm/vec2.hpp>
 #include <glm/vec3.hpp>
 
-
 namespace silver {
 
 class CameraControllerWidget;
 class Projection3d;
+
+struct CameraConfig {
+  glm::vec3 focus;
+  glm::vec3 n;
+  glm::vec3 v;
+  glm::vec2 visible_area;
+  float distance_from_projection;
+};
 
 class Camera3d {
  public:
