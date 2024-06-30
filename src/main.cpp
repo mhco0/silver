@@ -40,7 +40,7 @@ int main(void) {
       // if (nurbs_and_camera_config.has_value()) {
       //   auto [nurbs_config, camera_config] = nurbs_and_camera_config.value();
       //   auto surface = silver::Nurbs(nurbs_config);
-      //   silver::SaveSurface(surface, "./assets/nurbs2.txt");
+      //   silver::SaveSurface(surface, "./assets/nurbs.txt");
       // }
     }
   };

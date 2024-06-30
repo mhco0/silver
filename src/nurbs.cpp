@@ -92,7 +92,7 @@ NurbsSurface Nurbs(const NurbsConfig& nurbs_config) {
 
       surface.surface_points.push_back(point);
     }
-    u = nurbs_config.u_nodes[nurbs_config.n_u - 1];
+    u = nurbs_config.u_nodes[nurbs_config.n_u - 1] - delta_u;
   }
 
   return surface;
