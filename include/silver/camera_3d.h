@@ -23,6 +23,8 @@ class Camera3d {
  public:
   explicit Camera3d();
 
+  void Set(const CameraConfig& config);
+
   void Orthonomalize();
 
   void Reset();

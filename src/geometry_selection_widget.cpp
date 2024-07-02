@@ -42,7 +42,7 @@ class NfdWrapper {
 };
 
 tl::expected<std::vector<std::string>, std::string> OpenDialog() {
-  constexpr const char* const kFilterText = "txt";
+  constexpr const char* const kFilterText = "txt;data";
   NfdWrapper wrapper{};
   auto open_result = NFD_OpenDialogMultiple(kFilterText, "", &wrapper.GetSet());
   using tlu = tl::unexpected<std::string>;

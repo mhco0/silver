@@ -16,6 +16,15 @@ Camera3d::Camera3d() {
   Reset();
 }
 
+void Camera3d::Set(const CameraConfig& config) {
+  n_ = config.n;
+  v_ = config.v;
+  focus_ = config.focus;
+  visible_area_ = config.visible_area;
+  distance_from_projection_ = config.distance_from_projection;
+  Orthonomalize();
+}
+
 glm::vec3 Camera3d::Translate(const glm::vec3& point) {
   glm::mat3x3 basis_ = {
       glm::vec3{u_.x, v_.x, n_.x},

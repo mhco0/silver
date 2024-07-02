@@ -30,18 +30,24 @@ int main(void) {
   window.AddWidget(&geometry_selection_widget);
   window.AddNode(&canvas);
 
-  auto add_geometry =
-      [&canvas, &projection](const std::vector<std::string>& paths) -> void {
+  auto add_geometry = [&camera, &canvas, &projection](
+                          const std::vector<std::string>& paths) -> void {
     for (const auto& path : paths) {
-      auto geometry = silver::LoadGeometry(path);
-      canvas.AddObject(geometry.value());
-      // auto nurbs_and_camera_config = silver::LoadNurbsAndCameraConfig(path);
+      if (path.ends_with("data")) {
+        auto nurbs_and_camera_config = silver::LoadNurbsAndCameraConfig(path);
 
-      // if (nurbs_and_camera_config.has_value()) {
-      //   auto [nurbs_config, camera_config] = nurbs_and_camera_config.value();
-      //   auto surface = silver::Nurbs(nurbs_config);
-      //   silver::SaveSurface(surface, "./assets/nurbs.txt");
-      // }
+        if (nurbs_and_camera_config.has_value()) {
+          auto [nurbs_config, camera_config] = nurbs_and_camera_config.value();
+          camera.Set(camera_config);
+          auto surface = silver::Nurbs(nurbs_config);
+          silver::SaveSurface(surface, "./assets/nurbs.txt");
+          auto geometry = silver::LoadGeometry("./assets/nurbs.txt");
+          canvas.AddObject(geometry.value());
+        }
+      } else {
+        auto geometry = silver::LoadGeometry(path);
+        canvas.AddObject(geometry.value());
+      }
     }
   };
 
