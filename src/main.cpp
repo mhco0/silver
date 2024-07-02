@@ -19,7 +19,7 @@
 #include <silver/window.h>
 
 int main(void) {
-  silver::Window window(500, 500, "Silver Surface Viewer");
+  silver::Window window(700, 700, "Silver Surface Viewer");
   silver::Camera3d camera;
   silver::CameraControllerWidget camera_widget(&camera);
   silver::Projection3d projection(&camera, &window);

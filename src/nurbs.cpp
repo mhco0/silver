@@ -83,16 +83,16 @@ NurbsSurface Nurbs(const NurbsConfig& nurbs_config) {
   NurbsSurface surface{};
   surface.p_u = nurbs_config.p_u;
   surface.p_v = nurbs_config.p_v;
-  for (int i = 0; i < nurbs_config.p_v; i++) {
-    v = v + delta_v;
-    for (int j = 0; j < nurbs_config.p_u; j++) {
-      u = u + delta_u;
 
+  for (int j = 0; j < nurbs_config.p_u; j++) {
+    u = u + delta_u;
+    for (int i = 0; i < nurbs_config.p_v; i++) {
+      v = v + delta_v;
       auto point = internal::calculate_surface_point(u, v, nurbs_config);
 
       surface.surface_points.push_back(point);
     }
-    u = nurbs_config.u_nodes[nurbs_config.n_u - 1] - delta_u;
+    v = nurbs_config.v_nodes[nurbs_config.n_v - 1] - delta_v;
   }
 
   return surface;
