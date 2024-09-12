@@ -13,10 +13,16 @@
 
 #include "silver/camera_3d.h"
 #include "silver/nurbs.h"
+#include "silver/object_3d.h"
 #include "silver/triangle.h"
 
 namespace silver {
+
+// @warning: Deprecated
 tl::expected<std::vector<Triangle>, std::string_view> LoadGeometry(
+    const std::string& path_file);
+
+tl::expected<Object3d, std::string_view> Load3dObject(
     const std::string& path_file);
 
 tl::expected<std::pair<NurbsConfig, CameraConfig>, std::string_view>
