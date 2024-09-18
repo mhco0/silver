@@ -11,6 +11,7 @@
 #include <glm/vec3.hpp>
 
 #include "silver/i_node.h"
+#include "silver/object_3d.h"
 #include "silver/projection_3d.h"
 #include "silver/triangle.h"
 #include "silver/window.h"
@@ -20,7 +21,7 @@ class Canvas : public INode {
  public:
   Canvas(Window* target, Projection3d* projection);
 
-  void AddObject(const std::vector<Triangle>& object);
+  void AddObject(const Object3d& object);
 
   void DrawPoint(const glm::vec2& point, const sf::Color& color);
   void DrawPoints(const std::vector<glm::vec2>& points, const sf::Color& color);
@@ -36,6 +37,6 @@ class Canvas : public INode {
  private:
   Window* target_;
   Projection3d* projection_;
-  std::vector<std::vector<Triangle>> objects_;
+  std::vector<Object3d> objects_;
 };
 }  // namespace silver

@@ -8,6 +8,7 @@
 #include <vector>
 
 #include <glm/gtc/epsilon.hpp>
+#include <glm/trigonometric.hpp>
 #include <glm/vec3.hpp>
 #include <tl/expected.hpp>
 
@@ -44,19 +45,44 @@ tl::expected<std::vector<Triangle>, std::string_view> LoadGeometry(
     }
   }
 
+  if (vertices.size() == 0) {
+    return tl::unexpected("vertices size can't be zero");
+  }
+
   std::vector<Triangle> triangles;
+
+  auto vertice_id_to_idx = [&vertices](int i, int j) -> int {
+    return i * vertices.at(0).size() + j;
+  };
+
   for (int i = 0; i <= vertices.size() - 2; ++i) {
     for (int j = 0; j <= vertices[i].size() - 2; ++j) {
-      triangles.push_back(Triangle(std::array<glm::vec3, 3>{
-          vertices[i][j],
-          vertices[i][j + 1],
-          vertices[i + 1][j],
-      }));
-      triangles.push_back(Triangle(std::array<glm::vec3, 3>{
-          vertices[i][j + 1],
-          vertices[i + 1][j + 1],
-          vertices[i + 1][j],
-      }));
+      triangles.push_back(Triangle{
+          std::array<glm::vec3, 3>{
+              vertices[i][j],
+              vertices[i][j + 1],
+              vertices[i + 1][j],
+          },
+          glm::cross(vertices[i][j], vertices[i][j + 1]),
+          {
+              vertice_id_to_idx(i, j),
+              vertice_id_to_idx(i, j + 1),
+              vertice_id_to_idx(i + 1, j),
+          },
+      });
+      triangles.push_back(Triangle{
+          std::array<glm::vec3, 3>{
+              vertices[i][j + 1],
+              vertices[i + 1][j + 1],
+              vertices[i + 1][j],
+          },
+          glm::cross(vertices[i][j + 1], vertices[i + 1][j + 1]),
+          {
+              vertice_id_to_idx(i, j + 1),
+              vertice_id_to_idx(i + 1, j + 1),
+              vertice_id_to_idx(i + 1, j),
+          },
+      });
     }
   }
 

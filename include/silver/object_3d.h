@@ -16,17 +16,15 @@ struct VerticeData {
   glm::vec3 vertice_normal{};
 };
 
-struct TriangleData {
-  glm::ivec3 vertice_idx{};
-  glm::vec3 normal{};
-};
-
 class Object3d {
  public:
   Object3d(const std::vector<Triangle>& triangles);
 
+  const std::vector<VerticeData>& Vertices() const;
+  const std::vector<Triangle>& Triangles() const;
+
  private:
   std::vector<VerticeData> vertices_data_;
-  std::vector<TriangleData> triangle_data_;
+  std::vector<Triangle> triangle_data_;
 };
 }  // namespace silver

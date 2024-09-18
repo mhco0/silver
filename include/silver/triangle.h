@@ -8,11 +8,12 @@
 #include <glm/vec2.hpp>
 #include <glm/vec3.hpp>
 
-
 namespace silver {
 
 struct Triangle {
   std::array<glm::vec3, 3> vertices;
+  glm::vec3 normal;
+  glm::ivec3 vertices_idx;
 };
 
 }  // namespace silver

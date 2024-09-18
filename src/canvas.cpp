@@ -17,6 +17,7 @@
 #include <glm/vec3.hpp>
 
 #include "silver/canvas.h"
+#include "silver/object_3d.h"
 #include "silver/projection_3d.h"
 #include "silver/triangle.h"
 #include "silver/window.h"
@@ -115,7 +116,7 @@ std::vector<glm::vec2> ScanLine(glm::vec2 p0, glm::vec2 p1, glm::vec2 p2) {
 Canvas::Canvas(Window* target, Projection3d* projection)
     : target_(target), projection_(projection), objects_{} {}
 
-void Canvas::AddObject(const std::vector<Triangle>& object) {
+void Canvas::AddObject(const Object3d& object) {
   objects_.push_back(object);
 }
 
@@ -194,7 +195,7 @@ void Canvas::Draw() {
   std::vector<sf::Color> render_colors;
   auto size = target_->window_.getSize();
   for (auto& object : objects_) {
-    for (auto& triangule : object) {
+    for (auto& triangule : object.Triangles()) {
       auto p0 = projection_->Project(triangule.vertices[0]);
       auto p1 = projection_->Project(triangule.vertices[1]);
       auto p2 = projection_->Project(triangule.vertices[2]);

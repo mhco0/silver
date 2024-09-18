@@ -13,11 +13,12 @@ project(
   LANGUAGES CXX
   VERSION 1.0.0)
 
-find_package(ImGui-SFML CONFIG REQUIRED)
 find_package(
   SFML
   COMPONENTS system window graphics CONFIG
   REQUIRED)
+find_package(ImGui-SFML CONFIG REQUIRED)
+
 find_package(glm CONFIG REQUIRED)
 find_package(imgui CONFIG REQUIRED)
 find_package(OpenGL REQUIRED)
@@ -31,6 +32,7 @@ set(silver_SRCS
     ./src/main.cpp
     ./src/projection_3d.cpp
     ./src/window.cpp
+    ./src/object_3d.cpp
     ./src/utils.cpp
     ./src/camera_controller_widget.cpp
     ./src/canvas.cpp
@@ -42,6 +44,7 @@ set(silver_HRDS
     ./include/silver/application.h
     ./include/silver/camera_3d.h
     ./include/silver/window.h
+    ./include/silver/object_3d.h
     ./include/silver/projection_3d.h
     ./include/silver/utils.h
     ./include/silver/i_widget.h
@@ -65,7 +68,6 @@ target_link_libraries(
           imgui::imgui
           tl::expected
           unofficial::nativefiledialog::nfd)
-
 
 # Tests
 include(GoogleTest)

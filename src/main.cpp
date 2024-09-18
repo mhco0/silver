@@ -14,6 +14,7 @@
 #include <silver/canvas.h>
 #include <silver/geometry_selection_widget.h>
 #include <silver/nurbs.h>
+#include <silver/object_3d.h>
 #include <silver/projection_3d.h>
 #include <silver/utils.h>
 #include <silver/window.h>
@@ -42,11 +43,13 @@ int main(void) {
           auto surface = silver::Nurbs(nurbs_config);
           silver::SaveSurface(surface, "./assets/nurbs.txt");
           auto geometry = silver::LoadGeometry("./assets/nurbs.txt");
-          canvas.AddObject(geometry.value());
+          silver::Object3d object(geometry.value());
+          canvas.AddObject(object);
         }
       } else {
         auto geometry = silver::LoadGeometry(path);
-        canvas.AddObject(geometry.value());
+        silver::Object3d object(geometry.value());
+        canvas.AddObject(object);
       }
     }
   };
